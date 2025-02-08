@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE_URL = "https://notes-backend-xyz.onrender.com"; // Replace with your actual backend URL
+const API_BASE_URL = "https://notes-backend-z1rh.onrender.com"; // Replace with your actual backend URL
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
