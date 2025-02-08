@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = "https://notes-backend-z1rh.onrender.com"; // Replace with your actual backend URL
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,14 +12,14 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", { email, password }, { withCredentials: true });
+      const res = await axios.post(`${API_BASE_URL}/auth/login`, { email, password }, { withCredentials: true });
       alert("Login successful!");
       if (res.data.token) {
         localStorage.setItem("token", res.data.token); 
       }
       navigate("/");
     } catch (error) {
-      alert("Error: " + error.response.data.message);
+      alert("Error: " + (error.response?.data?.message || "Something went wrong"));
     }
   };
 

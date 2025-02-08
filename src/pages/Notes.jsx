@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = "https://notes-backend-xyz.onrender.com"; // Replace with your actual backend URL
+
 const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState("");
@@ -12,7 +14,7 @@ const Notes = () => {
   const fetchNotes = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/auth/notes", { 
+      const res = await axios.get(`${API_BASE_URL}/auth/notes`, { 
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -20,11 +22,11 @@ const Notes = () => {
       });
       setNotes(res.data);
     } catch (error) {
-      if (error.response.status === 401 || error.response.status === 403) {
+      if (error.response?.status === 401 || error.response?.status === 403) {
         alert("Session expired or invalid token. Please log in again.");
         navigate("/login");
       } else {
-        alert("Error: " + error.response.data.message);
+        alert("Error: " + (error.response?.data?.message || "Something went wrong"));
       }
     } finally {
       setLoading(false);
@@ -39,7 +41,7 @@ const Notes = () => {
   const addNote = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/auth/notes", 
+      await axios.post(`${API_BASE_URL}/auth/notes`, 
         { title, content }, 
         { withCredentials: true, 
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -48,20 +50,20 @@ const Notes = () => {
       setContent("");
       fetchNotes();
     } catch (error) {
-      alert("Error: " + error.response.data.message);
+      alert("Error: " + (error.response?.data?.message || "Failed to add note"));
     }
   };
 
   // Delete note function
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/auth/notes/${id}`, { 
+      await axios.delete(`${API_BASE_URL}/auth/notes/${id}`, { 
         withCredentials: true,
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       fetchNotes();
     } catch (error) {
-      alert("Error: " + error.response.data.message);
+      alert("Error: " + (error.response?.data?.message || "Failed to delete note"));
     }
   };
 

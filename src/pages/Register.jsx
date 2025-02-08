@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = "https://notes-backend-xyz.onrender.com"; // Replace with your actual backend URL
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -11,11 +13,11 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/auth/register", { name, email, password });
+      await axios.post(`${API_BASE_URL}/auth/register`, { name, email, password });
       alert("Registration Successful!");
       navigate("/login");
     } catch (error) {
-      alert("Error: " + error.response.data.message);
+      alert("Error: " + (error.response?.data?.message || "Something went wrong"));
     }
   };
 
